@@ -1,0 +1,5 @@
+name: cupstream2distrobot
+description: Cupstream2distro IRC bot.
+dependencies:
+  logging: any
+  path: any

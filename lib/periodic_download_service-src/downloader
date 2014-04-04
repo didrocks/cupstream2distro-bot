@@ -1,0 +1,34 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+# Copyright (C) 2014 Didier Roche
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; version 3.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
+import argparse
+import logging
+import requests
+import sys
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description="Download and print an url content")
+    parser.add_argument("url", help="url to download and print for")
+    args = parser.parse_args()
+
+    response = requests.get(args.url)
+    if response.status_code != 200:
+        logging.error("Couldn't fetch {} and so, couldn't proceed your request.".format(args.url))
+        sys.exit(1)
+
+    print(response.content.decode('utf8'))
