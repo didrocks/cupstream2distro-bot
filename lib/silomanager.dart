@@ -59,7 +59,7 @@ void _parseNewContent(String content) {
     }
     else if(item[12] == "Landed") {
       // if it has landed and was in previous activeSilos list, update the status to trigger the pings
-      var silo = activeSilos.firstWhere((silo) => id != silo.id,
+      var silo = activeSilos.firstWhere((silo) => id == silo.id,
                                         orElse: () => null);
       if(silo != null) {
         silo.status = new Status("Landed", "", true);
