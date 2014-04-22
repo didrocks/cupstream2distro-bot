@@ -4,5 +4,6 @@ dependencies:
   args: any
   csvparser:
     git: git@github.com:didrocks/csvparser.dart.git
+  irc_client: any
   logging: any
   path: any

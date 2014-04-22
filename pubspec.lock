@@ -16,6 +16,10 @@ packages:
       url: "git@github.com:didrocks/csvparser.dart.git"
     source: git
     version: "0.0.0"
+  irc_client:
+    description: irc_client
+    source: hosted
+    version: "0.1.0"
   logging:
     description: logging
     source: hosted

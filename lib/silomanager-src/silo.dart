@@ -39,7 +39,10 @@ abstract class BaseSilo {
   BaseSilo(this.line, this.assignee, this.description, this.mps, this.sources,
            this.comment);
 
-  void _sendMessage(message) => _messageController.add(message);
+  void _sendMessage(message) {
+    log.fine("Sending: $message");
+    _messageController.add(message);
+  }
 
 }
 
@@ -109,9 +112,9 @@ class ActiveSilo extends BaseSilo {
     if (_siloName == newSiloName)
       return;
     if (newSiloName.isEmpty && _siloName.isNotEmpty)
-      _sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING, ${assignee.join(", ")}: silo $_siloName is now been freed. It contained: $description");
+      _sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING, ${assignee.join(", ")}: silo $newSiloName has now been freed. It contained: $description");
     else
-      _sendMessage("${assignee.join(", ")}: silo $_siloName is now assigned for $description");
+      _sendMessage("${assignee.join(", ")}: silo $newSiloName is now assigned for $description");
     _siloName = newSiloName;
   }
   String _siloName;

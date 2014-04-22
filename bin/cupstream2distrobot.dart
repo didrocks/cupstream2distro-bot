@@ -5,14 +5,16 @@ import 'dart:io';
 import 'package:args/args.dart';
 import "package:logging/logging.dart";
 
+import "package:cupstream2distrobot/ircbot.dart";
 import "package:cupstream2distrobot/periodic_download_service.dart" as downloadservice;
 import "package:cupstream2distrobot/silomanager.dart" as silomanager;
 import "package:cupstream2distrobot/utils.dart";
 
 const USE_FILE = 'useFile';
+const GOOGLE_DOC_URL = "https://docs.google.com/a/canonical.com/spreadsheet/ccc?key=0AuDk72Lpx8U5dFlCc1VzeVZzWmdBZS11WERjdVc3dmc&output=csv";
 
 void main(List<String> arguments) {
-  Level debugLevel = Level.WARNING;
+  Level debugLevel = Level.FINE;
   final parser = new ArgParser()
       ..addOption(USE_FILE, abbr:'f', help: "Use this csv file instead of downloading online")
       ..addFlag("verbose", abbr: 'v', negatable: false, help: "Maximum debug info")
@@ -44,11 +46,14 @@ void main(List<String> arguments) {
     sourceStream = file.readAsString(encoding: const Utf8Codec()).asStream();
   }
   else {
-    sourceStream =
-      downloadservice.periodicDownload("https://docs.google.com/a/canonical.com/spreadsheet/ccc?key=0AuDk72Lpx8U5dFlCc1VzeVZzWmdBZS11WERjdVc3dmc&output=csv",
-                                       30, useDownloadScript: true);
+    sourceStream = downloadservice.periodicDownload(GOOGLE_DOC_URL, 30, useDownloadScript: true);
   }
-  silomanager.run(sourceStream);
+
+  // connect to IRC
+  IRC connection = new IRC();
+
+  // connect the stream and start the processing
+  silomanager.run(sourceStream, connection.sendMessage);
 
 }
 
