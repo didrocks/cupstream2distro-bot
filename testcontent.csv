@@ -1,0 +1,123 @@
+Last built image:,#302 (17.04.14),Last promoted image:,#302 (17.04.14),,Hover to see current landing components,Remaining silos: 5,,,,,,,,,
+Landing instructions/Image status:,,,,,"FFE: https://bugs.launchpad.net/ubuntu/+bug/1282590, https://bugs.launchpad.net/ubuntu/+source/autopilot/+bug/1282593, https://bugs.launchpad.net/ubuntu/+source/goget-ubuntu-touch/+bug/1290944",,,,,,,,,,
+Description of landing,Lander,"Status (auto-updated, do not touch)",Comments,Test plans to run,Merge proposals to land,Additional source packages to land,QA sign off needed,Ready? MP following guidelines,,request ID,assigned silo,Computed status,raw status,job url,ping status
+Normalize Indicator Startup,thostr,,"Most code changes are for desktop, otherwise mostly config cleanups.  Making all indicator configs the same.  Laney said this still requires some looking into
+Qt 5.2 landed, this could proceed now
+
+Split up this big landing into smaller portions, seb128 helping on that.
+20140327: progress?",,"https://code.launchpad.net/~ted/indicator-bluetooth/startup-cleanup/+merge/207773
+https://code.launchpad.net/~ted/indicator-keyboard/startup-cleanup/+merge/207768
+https://code.launchpad.net/~ted/indicator-printers/startup-cleanup/+merge/207766
+https://code.launchpad.net/~ted/indicator-location/startup-cleanup/+merge/207765
+https://code.launchpad.net/~ted/indicator-power/startup-cleanup/+merge/207764",,,No,,,,,,,
+"Add public alarm API, use platform APIs for monitoring alarms",thostr,,Still waiting to get hybris dependency on desktop resolved,https://wiki.ubuntu.com/Process/Merges/TestPlan/indicator-datetime,"https://code.launchpad.net/~charlesk/platform-api/alarm-api/+merge/207107
+https://code.launchpad.net/~charlesk/indicator-datetime/alarm-api/+merge/209003",,,No,,,,,,,
+vibration platform-api and usensord,sergiusens,,"Mirv/20140317: will need silo reassigned when also testing possible to be done. Mir landing takes platform-api lock now.
+Mirv/20140318: silo reassigned, please build & test
+Mirv/20140326: ""< sergiusens> needs some fixing from ricmm; I'll talk to him today""",usensord tests; exploratory over platform api,"https://code.launchpad.net/~sergiusens/usensord/repeat/+merge/202303
+https://code.launchpad.net/~ricmm/platform-api/usensord-backend-cpp/+merge/205804",,,No,,,,,,,
+Fixes for connectivity-api and network indicator,mhr3,,,https://wiki.ubuntu.com/Process/Merges/TestPlan/indicator-network https://wiki.ubuntu.com/Process/Merges/TestPlan/connectivity-api,"https://code.launchpad.net/~ted/indicator-network/startup-cleanup/+merge/207771
+https://code.launchpad.net/~kaijanmaki/unity8/indicator-root-state-icons-fix/+merge/213727
+https://code.launchpad.net/~unity-api-team/connectivity-api/packaging-fix/+merge/211033 https://code.launchpad.net/~jpakkane/connectivity-api/pimpl/+merge/211034 https://code.launchpad.net/~jpakkane/connectivity-api/docfix/+merge/210606 https://code.launchpad.net/~unity-api-team/connectivity-api/misc-changes/+merge/211073 https://code.launchpad.net/~unity-api-team/indicator-network/indicator-network-cpp/+merge/210973
+https://code.launchpad.net/~kaijanmaki/qmenumodel/unitymenumodel_setname-allow-empty-string/+merge/213768",,,No,,,,,,,
+(small FEATURE) Display albums in the music scope,mhr3,In silo landing-015. Packages built,"Needs integration with music-app, waiting for https://code.launchpad.net/~andrew-hayzen/music-app/add-url-dispatcher-album/+merge/214414; music-app ready now",https://wiki.ubuntu.com/Process/Merges/TestPlan/localmediascopes,https://code.launchpad.net/~unity-team/unity-scope-mediascanner/albumresults/+merge/206697,,Yes,Yes,,1397484924561,landing-015,Packages built,Packages built,,TRUE
+Split the greeter out,Saviq,In silo landing-002. Packages built,"Only preparing for now.
+
+CAN BE FLUSHED IF NECESSARY. 2014-04-10: BUT FLUSH INFOGRAPHICS BELOW FIRST IF IN NEED!
+
+20140325/Mirv: rebuilds should be up-to-date
+20140328/Mirv: temporarily released since critically low on silos!
+20140328/sil: can be re-assigned, Saviq said it's not for now, so let's assign it back on Monday morning
+20140331/Mirv: reassigned, CONFLICTING COMPONENTS, need rebuild after the other silos landed
+20140402/Mirv: redid u-t-s packaging branch, removed already merged gsettings-u-t-s, rebuilt what was released from right edge with the exception of unity8 that conflicts now
+
+","https://wiki.ubuntu.com/Process/Merges/TestPlans/Unity8
+Needs design sign-off and extensive dogfooding of greeter and unity
+
+","https://code.launchpad.net/~timo-jyrinki/ubuntu-touch-session/packaging_robru/+merge/213813
+https://code.launchpad.net/~mterry/ubuntu-touch-session/split/+merge/211549
+https://code.launchpad.net/~unity-team/unity-system-compositor/new-gl-screen/+merge/210466
+https://code.launchpad.net/~mterry/unity-system-compositor/switch-after-buffers/+merge/211776
+https://code.launchpad.net/~mterry/unity8/split/+merge/213149
+https://code.launchpad.net/~mterry/mir/no-nested-display-config/+merge/214979",,Yes,Yes,,1396919619106,landing-002,Packages built,Packages built,,TRUE
+Switch to suru theme,Saviq,,,"https://wiki.ubuntu.com/Process/Merges/TestPlans/Unity8
+https://wiki.ubuntu.com/Process/Merges/TestPlan/ui-toolkit
+Needs design sign-off","https://code.launchpad.net/~unity-team/unity8/suru-switch/+merge/207991
+https://code.launchpad.net/~saviq/ubuntu-ui-toolkit/suru-switch/+merge/211328",,,No,,,,,,,
+"BIG FEATURE: media-hub(NEW), qtvideo-node, qtubuntu-media, qtubuntu-media-signals",sergiusens/jhodapp,In silo landing-017. Can't build: Merge conflict.,"Instructions on how to install the feature: http://paste.ubuntu.com/7227996/
+
+sil: NOTE - decision has been made to not publish it until we +1 with Ricardo and Sergio",https://wiki.ubuntu.com/Process/Merges/TestPlan/media-hub,"https://code.launchpad.net/~phablet-team/media-hub/video-support/+merge/212905
+https://code.launchpad.net/~phablet-team/media-hub/powerd-interface/+merge/214941
+https://code.launchpad.net/~phablet-team/qtubuntu-media/add-media-hub-support/+merge/212897
+https://code.launchpad.net/~jhodapp/qtubuntu-media-signals/gl-consumer/+merge/212906
+https://code.launchpad.net/~phablet-team/qtvideo-node/add-media-hub-support/+merge/212725
+https://code.launchpad.net/~phablet-team/mediaplayer-app/remove_powerd/+merge/214993
+","libhybris
+gst-plugins-bad1.0
+android
+apparmor-easyprof-ubuntu",Yes,Yes,,1396954950332,landing-017,Can't build: Merge conflict.,Can't build: Merge conflict.,https://ci-train.ubuntu.com/job/landing-017-1-build/38/console,TRUE
+qtbase fix keymap update handling,Mirv,,"canceled (for now), reqs newer libxkbcommon from Debian -> u-series",All AP:s + desktop smoke test.,,qtbase-opensource-src,,No,,,,,,,
+Prep silo for file-based infographics,Saviq,In silo landing-010. Packages built,"Only prep, can be flushed if needed, please don't block involved projects
+
+Needs dogfooding of infographics and design ACK
+
+sil: low on silos, flushing silo!
+sil: reassigned once again",https://wiki.ubuntu.com/Process/Merges/TestPlans/Unity8,"https://code.launchpad.net/~unity-team/libusermetrics/file-based-infographics/+merge/214020
+https://code.launchpad.net/~pete-woods/camera-app/file-based-infographics/+merge/210573",,Yes,Yes,,1397030962540,landing-010,Packages built,Packages built,,TRUE
+Testing of non-visual compoents issues,veebers,,Force free on 2014-04-09 on request from veebers - 21:49 EST,https://wiki.ubuntu.com/Process/Merges/TestPlan/autopilot,https://code.launchpad.net/~veebers/autopilot-qt/non-visual-components-take2/+merge/214143,,,No,,,,,,,
+"BIG FEATURE: mms support (network-manager, ofono, nuntium(NEW), lxc-android-config
+network manager doesn't online the modem anymore (wasn't supposed to); telepathy-ofono is the sole component in charge of that; ofono changes it's provisioning of the gprs files to look into apns.conf and mbpi and merges them for better autoprovisioning. nuntium is new, and downloads MMS and signals it (for telepathy-ofono to grab).",sergiusens,In silo landing-013. Silo ready to build packages,,"exploratory
+https://wiki.ubuntu.com/Process/Merges/TestPlans/ofono","https://code.launchpad.net/~phablet-team/ofono/cf-mms-techpref-simw/+merge/213925
+https://code.launchpad.net/~sergiusens/nuntium/restart_and_start/+merge/215039
+
+","lxc-android-config
+network-manager
+ofono-phonesim
+",Yes,Yes,,1397145457590,landing-013,Silo ready to build packages,Silo ready to build packages,,TRUE
+"Allow to set download dir
+lp:1233149 Must write downloads of confined apps securely.
+lp:1277814 Client library does not expose getAllDownloadsWithMetadata.
+lp:1250200 Coverage is not a job in make.
+lp:1271507 Download Manager should provide a way to specify a target download destination.
+1295361 The name used when the content-diposition is not used is not good enough.
+lp:1300169 Project uses qmkae instead of cmake.
+lp:1300178 Uploads should be provided in order to centralize the long connectiosn needed.
+lp:1300183 There is no shared lib that can be used for downloads and uploads.
+lp:1300184 Project structure is very complicated for new developers.
+lp:1300243 Fakes can be changed by mocks created by google mocks.
+lp:1276468 make check does not copy the data folder if not present.
+lp:1297808 Provide method for retrieving a download by its ID.",sergiusens/mandel,In silo landing-011. Packages built,"stripped from mms silo
+
+The testplan is incomplete (comment on silo page)
+
+OTHER SILO ALSO HAS unity-scope-click, proceed with caution! Silo 4 being published, this silo must be rebuilt before publishing",https://wiki.ubuntu.com/Process/Merges/TestPlan/ubuntu-download-manager,"https://code.launchpad.net/~mandel/ubuntu-download-manager/all-downloads-client/+merge/207490
+https://code.launchpad.net/~mandel/unity-scope-click/rebuild-with-udm/+merge/214935",,Yes,Yes,,1397236175523,landing-011,Packages built,Packages built,,TRUE
+Resolve QList<QQmlError> warnings by porting to UbuntuTestCase.warnings. Fix alarm fetching order and interval. Adding dynamic tab handling functionality to Tabs. Flick and mouse long press simulation added to UbuntuTestCase. ,bzoltan,In silo landing-009. Packages built. Testing pass. QA needs to sign off.,,https://wiki.ubuntu.com/Process/Merges/TestPlan/ui-toolkit,https://code.launchpad.net/~bzoltan/ubuntu-ui-toolkit/landing140414/+merge/215648,,Yes,Yes,,1397478980537,landing-009,Packages built. Testing pass. QA needs to sign off.,Packages built,,TRUE
+"mir-dev test build for non-blocking eglswapbuffers
+potential fix for LP:#1292306 (Qt5.2 gui thread tied to eglswap & use of expose event)",kgunn,In silo landing-003. Packages built,"NOTE: this is a test only silo at the moment, MP's will need to be changed & retested before landing",https://wiki.ubuntu.com/Process/Merges/TestPlans/Mir,"https://code.launchpad.net/~afrantzis/mir/non-blocking-hidden-renderables/+merge/215923 
+https://code.launchpad.net/~gerboland/qtubuntu/surface-visible-hidden-side-channel/+merge/215884
+https://code.launchpad.net/~albaguirre/platform-api/compatibility-with-mir-0.1.9/+merge/215765
+https://code.launchpad.net/~albaguirre/unity-system-compositor/compatibility-with-mir-0.1.9/+merge/215769
+https://code.launchpad.net/~afrantzis/unity-system-compositor/non-blocking-swap-buffers/+merge/214759
+https://code.launchpad.net/~albaguirre/unity-mir/compatibility-with-mir-0.1.9/+merge/215890",,Yes,Yes,,1397494367900,landing-003,Packages built,Packages built,,TRUE
+- Bug #1307653: Voice mail no longer shows up in the messages pulldown,boiko,In silo landing-006. Migration: One package at least is not available at the destination. telephony-service (0.1+14.04.20140416-0ubuntu1) is in the UNAPPROVED queue. ,,https://wiki.ubuntu.com/Process/Merges/TestPlan/telephony-service,https://code.launchpad.net/~tiagosh/telephony-service/fix-voicemail-indicator/+merge/215956,,No,Yes,,1397677216636,landing-006,Migration: One package at least is not available at the destination. telephony-service (0.1+14.04.20140416-0ubuntu1) is in the UNAPPROVED queue. ,Migration: One package at least is not available at the destination. telephony-service (0.1+14.04.20140416-0ubuntu1) is in the UNAPPROVED queue. ,https://ci-train.ubuntu.com/job/check-publication-migration/7077/console,FALSE
+Fix indicator startup on unity8 desktop session,Saviq,Landed,,Exploratory in unity8 desktop session,https://code.launchpad.net/~saviq/unity8-desktop-session/start-indicators-lp1308891/+merge/216261,,No,Yes,,,,Landed,,,
+Fix a crasher (bug #1297297),mhr3,In silo landing-004. Migration: One package at least is not available at the destination. unity-scope-click (0.1+14.04.20140417-0ubuntu1) is in the proposed pocket. ,,https://wiki.ubuntu.com/Process/Merges/TestPlan/unity-scope-click,https://code.launchpad.net/~alecu/unity-scope-click/remove-abort/+merge/216310,,No,Yes,,1397745640488,landing-004,Migration: One package at least is not available at the destination. unity-scope-click (0.1+14.04.20140417-0ubuntu1) is in the proposed pocket. ,Migration: One package at least is not available at the destination. unity-scope-click (0.1+14.04.20140417-0ubuntu1) is in the proposed pocket. ,https://ci-train.ubuntu.com/job/check-publication-migration/7077/console,FALSE
+sync-monitor fix to monitor changes on contacts in address-book,bfiller,In silo landing-001. Migration: One package at least is not available at the destination. sync-monitor (0.1+14.04.20140417-0ubuntu1) is in the UNAPPROVED queue. ,,https://wiki.ubuntu.com/Process/Merges/TestPlan/sync-monitor,https://code.launchpad.net/~renatofilho/sync-monitor/fix-contact-sync/+merge/216383,,No,Yes,,1397762187927,landing-001,Migration: One package at least is not available at the destination. sync-monitor (0.1+14.04.20140417-0ubuntu1) is in the UNAPPROVED queue. ,Migration: One package at least is not available at the destination. sync-monitor (0.1+14.04.20140417-0ubuntu1) is in the UNAPPROVED queue. ,https://ci-train.ubuntu.com/job/check-publication-migration/7078/console,FALSE
+"Webapp reload page not working
+Fix for Google+ external links
+Fix for FB links in popup redirects",dbarth,In silo landing-005. Packages built,,"https://bugs.launchpad.net/webbrowser-app/+bug/1309138
+https://bugs.launchpad.net/unity-webapps-googleplus/+bug/1308784
+https://bugs.launchpad.net/webbrowser-app/+bug/1294279","https://code.launchpad.net/~abreu-alexandre/webbrowser-app/fix-network-dialog-reload/+merge/216379
+https://code.launchpad.net/~abreu-alexandre/unity-webapps-googleplus/update-manifest-with-url-redirect-pattern/+merge/216225
+https://code.launchpad.net/~abreu-alexandre/webbrowser-app/fix-popup-url-redirection/+merge/215328",,No,Yes,,1397808581717,landing-005,Packages built,Packages built,,TRUE
+"Unity8 tweaks
+- test fixes
+- fix overshoot detection in scopes
+- split out unity8-common package
+- fix appointment colour",Saviq,In silo landing-007. Packages built. Testing pass. You can publish.,sil: Saviq said this can wait with landing for U to open if needed,,"https://code.launchpad.net/~aacid/unity8/card_optimizations/+merge/213660
+https://code.launchpad.net/~aacid/unity8/categoryDelegateRangeFixOvershootDetection/+merge/214764
+https://code.launchpad.net/~saviq/unity8/split-common/+merge/214907
+https://code.launchpad.net/~aacid/unity8/fix-xvfbtest-dashview-plugin/+merge/215181
+https://code.launchpad.net/~nick-dedekind/unity8/lp1307048-appointment-colour/+merge/215689",,No,Yes,,1397810529751,landing-007,Packages built. Testing pass. You can publish.,Packages built,,TRUE
+"Ubuntu Push security and performance fixes, cherry picked from automatic to avoid a couple of big feature branches.",Chipaca,In silo landing-008. Packages built. Testing pass. You can publish.,Mirv: also to U?,https://wiki.ubuntu.com/Process/Merges/TestPlan/ubuntu-push,https://code.launchpad.net/~chipaca/ubuntu-push/cherrypickings/+merge/216466,,No,Yes,,1397843370183,landing-008,Packages built. Testing pass. You can publish.,Packages built,,TRUE
