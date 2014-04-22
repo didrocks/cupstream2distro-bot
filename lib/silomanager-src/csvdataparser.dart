@@ -16,7 +16,7 @@ class CsvIter implements Iterator<List<String>> {
   CsvIter(String data, {int numLineToSkip: 0})
       : cp = new CsvParser(data) {
     log.finest("Parsing $data");
-    log.fine("Skip first $numLineToSkip lines in Csv data");
+    log.finer("Skip first $numLineToSkip lines in Csv data");
     while (numLineToSkip > 0) {
       cp.moveNext();
       numLineToSkip--;

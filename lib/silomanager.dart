@@ -35,6 +35,7 @@ List<String> _separateContent(String parse, {useSlashSeparator: false}) {
 }
 
 void _parseNewContent(String content) {
+  log.fine("New download results received");
 
   var newActiveSilos =  new List<ActiveSilo>();
   var newUnassignedSilos =  new List<UnassignedSilo>();

@@ -1,7 +1,8 @@
 name: cupstream2distrobot
 description: Cupstream2distro IRC bot.
 dependencies:
+  args: any
+  csvparser:
+    git: git@github.com:didrocks/csvparser.dart.git
   logging: any
   path: any
-  csvparser: # use our own csvparser repo, containing fixes for cells with \n, ',', and '"'
-    git: git@github.com:didrocks/csvparser.dart.git
