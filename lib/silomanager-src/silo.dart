@@ -69,11 +69,22 @@ class UnassignedSilo extends BaseSilo {
     }
     var id = mps.join("") + sources.join("");
 
+    var silo;
     if (!_cache.containsKey(id)) {
-      final silo = new UnassignedSilo._internal(id, line, assignee, description, mps, sources, comment, ready);
+      silo = new UnassignedSilo._internal(id, line, assignee, description, mps, sources, comment, ready);
       _cache[id] = silo;
     }
-    return _cache[id];
+    else {
+      silo = _cache[id]
+          ..line = line
+          ..assignee = assignee
+          ..description = description
+          ..mps = mps
+          ..sources = sources
+          ..comment = comment
+          ..ready = ready;
+    }
+    return silo;
   }
 
   UnassignedSilo._internal(id, line, assignee, description, mps, sources, comment, isReady)
