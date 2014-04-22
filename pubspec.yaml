@@ -3,3 +3,5 @@ description: Cupstream2distro IRC bot.
 dependencies:
   logging: any
   path: any
+  csvparser: # use our own csvparser repo, containing fixes for cells with \n, ',', and '"'
+    git: git@github.com:didrocks/csvparser.dart.git

@@ -158,10 +158,10 @@ Future<String> _download(String url, {String downloadScript: ""}) {
  * Class used to send initial data to the isolate.
  */
 class _initInfo {
-  String url;
-  int seconds;
-  bool useDownloadScript;
-  Level logLevel;
+  final String url;
+  final int seconds;
+  final bool useDownloadScript;
+  final Level logLevel;
 
   _initInfo(this.url, this.seconds, this.useDownloadScript, this.logLevel);
 }
