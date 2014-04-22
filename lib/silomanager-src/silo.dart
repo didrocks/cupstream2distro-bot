@@ -7,7 +7,7 @@ import "package:cupstream2distrobot/silomanager.dart" show log;
 part "const.dart";
 
 
-/*
+/**
  * Different available status. We discare the jobUrl or ping
  * as an identifier.
  */
@@ -21,7 +21,7 @@ class Status {
   Status(this.message, this.jobUrl, this.ping);
 }
 
-/*
+/**
  * Common silo content between
  */
 abstract class BaseSilo {
@@ -30,9 +30,27 @@ abstract class BaseSilo {
   String description;
   List<String> mps;
   List<String> sources;
-  List<String> comment;
+  String comment;
 
   StreamController _messageController = new StreamController.broadcast();
+
+  Stream get message => _messageController.stream;
+
+  BaseSilo(this.line, this.assignee, this.description, this.mps, this.sources,
+           this.comment);
+
+  void _sendMessage(message) => _messageController.add(message);
+
+}
+
+//   model.fetchDone.listen((_) => doCoolStuff(model));
+/**
+ * Unassigned silos
+ */
+class UnassignedSilo extends BaseSilo {
+  String id; // artificial ID generated from sources and mps
+  static Map<String, UnassignedSilo> _cache;
+
   bool _ready;
 
   bool get ready => _ready;
@@ -44,44 +62,31 @@ abstract class BaseSilo {
       _sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING: new silo set as ready at line $line. Description is: $description. It contains: $mps and $sources");
   }
 
-  Stream get message => _messageController.stream;
-
-  BaseSilo(this.line, this.assignee, this.description, this.mps, this.sources,
-           this.comment, bool isReady) {
-    // trigger an event if is already ready when constructed
-    ready = isReady;
-  }
-
-  void _sendMessage(message) => _messageController.add(message);
-
-}
-
-//   model.fetchDone.listen((_) => doCoolStuff(model));
-
-class UnassignedSilo extends BaseSilo {
-  String id; // artificial ID generated from sources and mps
-  static Map<String, UnassignedSilo> _cache;
 
   factory UnassignedSilo(line, assignee, description, mps, sources, comment, ready) {
     if (_cache == null) {
       _cache = {};
     }
-    id = sources.toString(mps.join("") + sources.join(""));
+    var id = mps.join("") + sources.join("");
 
     if (!_cache.containsKey(id)) {
-      final silo = new UnassignedSilo._internal(line, assignee, description, mps, sources, comment, ready);
+      final silo = new UnassignedSilo._internal(id, line, assignee, description, mps, sources, comment, ready);
       _cache[id] = silo;
     }
     return _cache[id];
   }
 
-  UnassignedSilo._internal(line, assignee, description, mps, sources, comment, ready)
-      : super(line, assignee, description, mps, sources, comment, ready);
+  UnassignedSilo._internal(id, line, assignee, description, mps, sources, comment, isReady)
+      : super(line, assignee, description, mps, sources, comment) {
+    this.id = id;
+    // trigger an event if is already ready when constructed
+    scheduleMicrotask(() => this.ready = isReady);
+    log.finer("Build a new unassigned silo for line: $line, $assignee, $description, $mps, $sources");
+  }
 }
 
 
-// TODO: handling freeing an active silo
-/*
+/**
  * Active and assigned silo class name
  */
 class ActiveSilo extends BaseSilo {
@@ -105,8 +110,11 @@ class ActiveSilo extends BaseSilo {
     if (status == newStatus)
       return;
     _status = newStatus;
+    var message = "${assignee.join(", ")} ($siloName): ${_status.message}";
+    if (_status.jobUrl.isNotEmpty)
+      message += " (${_status.jobUrl})";
     if (status.ping)
-      _sendMessage("${assignee.join(", ")} ($siloName): ${_status.message}");
+      _sendMessage(message);
   }
   Status _status;
 
@@ -132,16 +140,16 @@ class ActiveSilo extends BaseSilo {
           ..description = description
           ..mps = mps
           ..sources = sources
-          ..comment = comment
-          ..ready = ready;
+          ..comment = comment;
     }
     return silo;
   }
 
   ActiveSilo._internal(this.id, this._siloName, _status, line, assignee,
                        description, mps, sources, comment, ready)
-      : super(line, assignee, description, mps, sources, comment, ready) {
+      : super(line, assignee, description, mps, sources, comment) {
     // ping about the status if the status worthes it
-    status = _status;
+    scheduleMicrotask(() => status = _status);
+    log.finer("Build a new active silo for $id, silo: $siloName, $assignee, line: $line");
   }
 }

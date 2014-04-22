@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
 import "package:logging/logging.dart";
 
 import "package:cupstream2distrobot/periodic_download_service.dart" as downloadservice;
@@ -16,6 +19,8 @@ void main() {
   new Timer(const Duration(seconds: 10), subscription.pause);
   new Timer(const Duration(seconds: 20), subscription.resume);*/
 
-  silomanager.run();
+  var file = new File('/home/didrocks/work/cupstream2distrobot/testcontent.csv');
+
+  silomanager.run(file.readAsString(encoding: const Utf8Codec()).asStream());
 
 }
