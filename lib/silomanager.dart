@@ -2,22 +2,28 @@ library silomanager;
 
 import 'dart:async';
 
-import "package:cupstream2distrobot/silomanager-src/silo.dart";
+import 'package:irc_client/irc_client.dart';
 import 'package:logging/logging.dart';
+
+import "package:cupstream2distrobot/ircbot.dart";
+import "package:cupstream2distrobot/silomanager-src/silo.dart";
 import 'package:cupstream2distrobot/silomanager-src/csvdataparser.dart';
 
 
 final Logger log = new Logger('SiloManager');
-var activeSilos = new List<ActiveSilo>();
-var unassignedSilos = new List<UnassignedSilo>();
+List<ActiveSilo> activeSilos = new List<ActiveSilo>();
+List<UnassignedSilo> unassignedSilos = new List<UnassignedSilo>();
 
-var sendMessageFunction;
+IRC ircConnection;
 
 /**
  * Subscribe to the [source] stream to be able to parse it later on
+ * Receive an IRC connection to subsribe an handler for additional
+ * commands.
  */
-void run(Stream<String> source, var _sendMessageFunction) {
-  sendMessageFunction = _sendMessageFunction;
+void run(Stream<String> source, IRC _ircConnection) {
+  ircConnection = _ircConnection;
+  ircConnection.addHandler(new _SiloBotHandler());
   source.listen(_parseNewContent);
 }
 

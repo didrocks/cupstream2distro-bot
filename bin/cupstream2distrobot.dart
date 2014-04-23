@@ -53,7 +53,7 @@ void main(List<String> arguments) {
   IRC connection = new IRC();
 
   // connect the stream and start the processing
-  silomanager.run(sourceStream, connection.sendMessage);
+  silomanager.run(sourceStream, connection);
 
 }
 
