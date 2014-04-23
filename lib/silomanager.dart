@@ -86,10 +86,120 @@ void _parseNewContent(String content) {
                                 description, mps, sources, comment, ready);
       newActiveSilos.add(silo);
       if (!(activeSilos.contains(silo)))
-          silo.message.listen(sendMessageFunction);
+          silo.message.listen(ircConnection.sendMessage);
     }
   }
 
   activeSilos = newActiveSilos;
   unassignedSilos = newUnassignedSilos;
+}
+
+class _SiloBotHandler extends Handler {
+
+  Map<String, dynamic> commands;
+
+  _SiloBotHandler() {
+    commands = {
+      'inspect': _inspectSiloStatus,
+      'status': _siloStatus,
+      'where': _siloComponents,
+      'who': _siloOwner
+    };
+  }
+
+  List<dynamic> getAllSilos() {
+    return new List<dynamic>()
+        ..addAll(activeSilos)
+        ..addAll(unassignedSilos);
+  }
+
+  void _inspectSiloStatus(String req, String channel, Connection cnx) =>
+      _siloStatus(req, channel, cnx, inspect: true);
+
+  void _siloStatus(String req, String channel, Connection cnx, {bool inspect: false}) {
+    bool found = false;
+    int lineNum = int.parse(req, onError: (req) {
+      activeSilos.forEach((silo) {
+        if (silo.siloName == req) {
+          var message = silo.statusMessage;
+          if (inspect)
+            message = silo.statusRequest;
+          cnx.sendMessage(channel, "$req status is: $message");
+          found = true;
+        }});
+      return -1;
+    });
+    if (lineNum > -1)
+      getAllSilos().forEach((silo) {
+        if (silo.line == lineNum) {
+          var message = silo.statusMessage;
+          if (inspect)
+            message = silo.statusRequest;
+          cnx.sendMessage(channel, "line $lineNum status is: $message");
+          found = true;
+      }});
+    if (!found)
+      cnx.sendMessage(channel, "Couldn't find anything matching this status request: $req");
+  }
+
+  void _siloComponents(String req, String channel, Connection cnx) {
+    var answer = new StringBuffer("Requests containing $req. ");
+    bool found = false;
+    getAllSilos().forEach((BaseSilo silo) {
+      if (silo.mps.any((mp) => mp.contains("/$req/")) ||
+          silo.sources.contains(req)) {
+        found = true;
+        if (silo is ActiveSilo)
+          answer.write("In ${silo.siloName}. ");
+        else if (silo is UnassignedSilo)
+          answer.write("In request line ${silo.line}. ");
+      }
+    });
+    if (!found)
+      answer.write("Not found in any active or pending silos");
+    cnx.sendMessage(channel, answer.toString());
+  }
+
+  void _siloOwner(String req, String channel, Connection cnx) {
+    var answer = new StringBuffer("Requests by $req. ");
+    bool found = false;
+    getAllSilos().forEach((BaseSilo silo) {
+      if(silo.assignee.contains(req)) {
+        found = true;
+        if (silo is ActiveSilo)
+          answer.write("In ${silo.siloName}. ");
+        else if (silo is UnassignedSilo)
+          answer.write("In request line ${silo.line}. ");
+      }
+    });
+    if (!found)
+      answer.write("Not found in any active or pending silos");
+    cnx.sendMessage(channel, answer.toString());
+  }
+
+  List<String> decipherCMD(String command, List<String> content) {
+    int index = content.indexOf(command);
+    if (index < 0 || index > content.length-2)
+      return new List<String>();
+    return content.getRange(++index, content.length).map((elem) => elem.toLowerCase()).toList();
+  }
+
+  bool onChannelMessage(String channel, String message, Connection cnx) {
+    var sentence = message.split(':').join(' ').split(' ');
+    bool oneCommandCalled = false;
+    for (var command in commands.keys) {
+      decipherCMD(command, sentence).forEach((arg) {
+        if (arg != null && arg.isNotEmpty) {
+          commands[command](arg.toLowerCase(), channel, cnx);
+          oneCommandCalled = true;
+        }
+      });
+    }
+    if (!oneCommandCalled && message.contains(BOT_NAME))
+      cnx.sendMessage(channel, "Sorry, your command hasn't been recognized ${HELP_MESSAGE}");
+    return false;
+  }
+
+  bool onPrivateMessage(String user, String message, Connection cnx) =>
+      onChannelMessage(user, message, cnx);
 }
