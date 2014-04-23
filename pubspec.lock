@@ -13,7 +13,7 @@ packages:
     description:
       ref: null
       resolved-ref: "9ed55b708089657c86987dd3fa7351670c24ba0e"
-      url: "git@github.com:didrocks/csvparser.dart.git"
+      url: "git://github.com/didrocks/csvparser.dart.git"
     source: git
     version: "0.0.0"
   irc_client:
