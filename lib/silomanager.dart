@@ -75,12 +75,12 @@ void _parseNewContent(String content) {
       var silo = activeSilos.firstWhere((silo) => id == silo.id,
                                         orElse: () => null);
       if(silo != null) {
-        silo.status = new Status("Landed", "", true);
+        silo.status = new Status("Landed", "", true, false);
         silo.siloName = "";
       }
     }
     else {
-      var newStatus = new Status(item[13], item[14], item[15] == "TRUE");
+      var newStatus = new Status(item[13], item[14], item[15] == "TRUE", item[12].contains("You can publish"));
 
       var silo = new ActiveSilo(id, item[11], newStatus, line, assignees,
                                 description, mps, sources, comment, ready);

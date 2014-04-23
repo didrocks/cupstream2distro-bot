@@ -15,10 +15,11 @@ class Status {
   String message;
   String jobUrl;
   bool ping;
+  bool publishable;
 
-  operator ==(Status other) => message == other.message;
+  operator ==(Status other) => message == other.message && publishable == other.publishable;
 
-  Status(this.message, this.jobUrl, this.ping);
+  Status(this.message, this.jobUrl, this.ping, this.publishable);
 }
 
 /**
@@ -129,13 +130,19 @@ class ActiveSilo extends BaseSilo {
     if (status == newStatus)
       return;
     _status = newStatus;
-    if (status.ping)
-      _sendMessage("${assignee.join(", ")} ($siloName): ${statusMessage}");
+    if (status.ping) {
+      if (status.publishable)
+        _sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING ($siloName): Ready to publish");
+      else
+        _sendMessage("${assignee.join(", ")} ($siloName): ${statusMessage}");
+    }
   }
   Status _status;
 
   String get statusMessage {
     var message = status.message;
+    if (status.publishable)
+      message += " and ready to publish";
     if (status.jobUrl.isNotEmpty)
       message += " (${_status.jobUrl})";
     return message;
