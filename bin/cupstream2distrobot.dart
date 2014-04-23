@@ -59,5 +59,5 @@ void main(List<String> arguments) {
 
 void _showHelpAndExit(ArgParser parser, {int returncode: 0}) {
   print(parser.getUsage());
-  exit(0);
+  exit(returncode);
 }
