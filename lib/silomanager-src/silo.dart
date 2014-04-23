@@ -35,6 +35,9 @@ abstract class BaseSilo {
   StreamController _messageController = new StreamController.broadcast();
 
   Stream get message => _messageController.stream;
+  get statusMessage;
+  String get statusRequest => "at line $line. Requested by $assignee. Contains: $description for $mps and $sources. Current comment: $comment";
+
 
   BaseSilo(this.line, this.assignee, this.description, this.mps, this.sources,
            this.comment);
@@ -65,6 +68,8 @@ class UnassignedSilo extends BaseSilo {
       _sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING: new silo set as ready at line $line. Description is: $description. It contains: $mps and $sources");
   }
 
+  String get statusMessage => "unassigned. Ready is set to ${ready ? 'Yes': 'No'}";
+  String get statusRequest => "Request " + super.statusRequest + " " + statusMessage;
 
   factory UnassignedSilo(line, assignee, description, mps, sources, comment, ready) {
     if (_cache == null) {
@@ -124,13 +129,19 @@ class ActiveSilo extends BaseSilo {
     if (status == newStatus)
       return;
     _status = newStatus;
-    var message = "${assignee.join(", ")} ($siloName): ${_status.message}";
-    if (_status.jobUrl.isNotEmpty)
-      message += " (${_status.jobUrl})";
     if (status.ping)
-      _sendMessage(message);
+      _sendMessage("${assignee.join(", ")} ($siloName): ${statusMessage}");
   }
   Status _status;
+
+  String get statusMessage {
+    var message = status.message;
+    if (status.jobUrl.isNotEmpty)
+      message += " (${_status.jobUrl})";
+    return message;
+  }
+
+  String get statusRequest => "Silo $siloName. " + super.statusRequest;
 
   factory ActiveSilo(id, _siloName, _status, line, assignee,
                      description, mps, sources, comment, ready) {
