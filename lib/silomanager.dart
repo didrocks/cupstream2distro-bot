@@ -27,7 +27,7 @@ void run(Stream<String> source, IRC _ircConnection) {
   source.listen(_parseNewContent);
 }
 
-List<String> _separateContent(String parse, {useSlashSeparator: false}) {
+List<String> _separateContent(String parse, {useSlashSeparator: false, toLowerCase: false}) {
   var result = new List<String>();
 
   if (useSlashSeparator)
@@ -35,8 +35,10 @@ List<String> _separateContent(String parse, {useSlashSeparator: false}) {
 
   for (var entry in parse.split(',')) {
     for (var x in entry.split(" ")) {
-      for (var y in x.split('\n'))
-        result.add(y.trim());
+      for (var y in x.split('\n')) {
+        y = y.trim();
+        result.add(toLowerCase? y.toLowerCase() : y);
+      }
     }
   }
   return result;
@@ -52,10 +54,10 @@ void _parseNewContent(String content) {
   var line = 3;
   for (var item in value) {
     line++;
-    var assignees = _separateContent(item[1], useSlashSeparator: true);
+    var assignees = _separateContent(item[1], useSlashSeparator: true, toLowerCase: true);
     var description = item[0];
-    var mps = _separateContent(item[5]);
-    var sources = _separateContent(item[6]);
+    var mps = _separateContent(item[5], toLowerCase: true);
+    var sources = _separateContent(item[6], toLowerCase: true);
     var comment = item[3];
     var ready = (item[8] == 'Yes');
 
@@ -66,7 +68,7 @@ void _parseNewContent(String content) {
                                     sources, comment, ready);
       newUnassignedSilos.add(silo);
       if (!(unassignedSilos.contains(silo)))
-          silo.message.listen(sendMessageFunction);
+          silo.message.listen(ircConnection.sendMessage);
     }
     else if(item[12] == "Landed") {
       // if it has landed and was in previous activeSilos list, update the status to trigger the pings
