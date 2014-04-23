@@ -14,7 +14,7 @@ const USE_FILE = 'useFile';
 const GOOGLE_DOC_URL = "https://docs.google.com/a/canonical.com/spreadsheet/ccc?key=0AuDk72Lpx8U5dFlCc1VzeVZzWmdBZS11WERjdVc3dmc&output=csv";
 
 void main(List<String> arguments) {
-  Level debugLevel = Level.FINE;
+  Level debugLevel = Level.INFO;
   final parser = new ArgParser()
       ..addOption(USE_FILE, abbr:'f', help: "Use this csv file instead of downloading online")
       ..addFlag("verbose", abbr: 'v', negatable: false, help: "Maximum debug info")
