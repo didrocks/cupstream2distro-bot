@@ -118,7 +118,8 @@ class ActiveSilo extends BaseSilo {
     if (_siloName == newSiloName)
       return;
     if (newSiloName.isEmpty && _siloName.isNotEmpty)
-      _sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING, ${assignee.join(", ")}: silo $newSiloName has now been freed. It contained: $description");
+      // FIXME: doesn't work for landed or force freed silo. We should make the diff of active silos maybe and return the list?
+      _sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING, ${assignee.join(", ")}: silo $_siloName has now been freed.");
     else
       _sendMessage("${assignee.join(", ")}: silo $newSiloName is now assigned for $description");
     _siloName = newSiloName;
