@@ -4,6 +4,8 @@ dependencies:
   args: any
   csvparser:
     git: git://github.com/didrocks/csvparser.dart.git
-  irc_client: any
+  irc_client:
+    # waiting for upstream to merge the changes and do a release
+    git: git://github.com/didrocks/irc_client.git
   logging: any
   path: any

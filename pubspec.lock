@@ -17,8 +17,11 @@ packages:
     source: git
     version: "0.0.0"
   irc_client:
-    description: irc_client
-    source: hosted
+    description:
+      ref: null
+      resolved-ref: be748219ba10cfb9f7d3e946646f4fd12b4a5245
+      url: "git://github.com/didrocks/irc_client.git"
+    source: git
     version: "0.1.0"
   logging:
     description: logging
