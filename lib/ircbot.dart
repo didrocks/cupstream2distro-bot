@@ -7,7 +7,7 @@ import 'package:irc_client/irc_client.dart';
 
 const BOT_NAME = "CI-SNCF";
 const BOT_QUIT_OWNER = "didrocks";
-const CHANNEL = "#ubuntu-ci-choo-choo";
+var CHANNEL = "#ubuntu-ci-choo-choo";
 const HELP_MESSAGE = "I notify about new events on the spreadsheet. You can as well use 'inspect [siloname|line]', 'status [siloname|line]', "
   "'where [component name]', 'who [lander name]' to get information on requests. You can PM me to get the answers without flooding the channel.";
 
@@ -15,8 +15,11 @@ class IRC {
   IrcClient bot;
   Connection connect;
 
-  IRC() {
-    bot = new IrcClient(BOT_NAME);
+  IRC({bool testmode: false}) {
+    if (testmode) {
+      CHANNEL += "-test";
+    }
+    bot = new IrcClient(BOT_NAME + (testmode ? "-test" : ""));
     bot.realName = "CI Train bot";
     bot.handlers.add(new _BotHandler());
     connect = bot.connect("irc.freenode.net", 6667);

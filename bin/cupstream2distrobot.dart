@@ -19,7 +19,8 @@ void main(List<String> arguments) {
       ..addOption(USE_FILE, abbr:'f', help: "Use this csv file instead of downloading online")
       ..addFlag("verbose", abbr: 'v', negatable: false, help: "Maximum debug info")
       ..addFlag("debug", abbr: 'd', negatable: false, help: "Moderate debug info")
-      ..addFlag("help", abbr: 'h', negatable: false, help: "Display help info");
+      ..addFlag("help", abbr: 'h', negatable: false, help: "Display help info")
+      ..addFlag("test", abbr: 't', negatable: false, help: "Test mode, append -debug to the channel and bot name");
 
   var argResults;
   try {
@@ -50,7 +51,7 @@ void main(List<String> arguments) {
   }
 
   // connect to IRC
-  IRC connection = new IRC();
+  IRC connection = new IRC(testmode: argResults["test"]);
 
   // connect the stream and start the processing
   silomanager.run(sourceStream, connection);
