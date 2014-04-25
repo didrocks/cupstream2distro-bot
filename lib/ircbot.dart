@@ -49,7 +49,7 @@ class _BotHandler extends Handler {
 
   bool onConnection(Connection cnx) {
     cnx.join(CHANNEL);
-    cnx.sendMessage(CHANNEL, "I'm baaack!");
+    cnx.sendMessage(CHANNEL, "Choo Choo!");
     return false;
   }
 
