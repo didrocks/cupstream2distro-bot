@@ -4,7 +4,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:irc_client/irc_client.dart';
+import 'package:logging/logging.dart';
+
+
 import 'package:cupstream2distrobot/silomanager-src/silo.dart';
+final Logger log = new Logger('SiloManager');
 
 const BOT_NAME = "CI-SNCF";
 var CHANNEL = "#ubuntu-ci-choo-choo";
@@ -22,6 +26,7 @@ class IRC {
     bot = new IrcClient(BOT_NAME + (testmode ? "-test" : ""));
     bot.realName = "CI Train bot";
     bot.handlers.add(new _BotHandler());
+    log.fine("Connecting bot to IRC");
     connect = bot.connect("irc.freenode.net", 6667);
   }
 
@@ -47,4 +52,11 @@ class _BotHandler extends Handler {
     cnx.sendMessage(CHANNEL, "I'm baaack!");
     return false;
   }
+
+  bool onDisconnection(Connection cnx) {
+    log.warning("Disconnected, waiting for 30s and trying to reconnect if not quitting beforehand");
+    new Timer(const Duration(seconds: 30), () => cnx.connect());
+    return true;
+  }
+
 }
