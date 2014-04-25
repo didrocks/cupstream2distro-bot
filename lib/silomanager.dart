@@ -89,9 +89,9 @@ void _parseNewContent(String content) {
   activeSilos.where((silo) => !newActiveSilos.contains(silo))
       .forEach((silo) {
         if (csvData.elementAt(silo.line - startOffset)[12] == "Landed") {
-          silo.sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING, ${silo.assignee.join(", ")}: silo ${silo.siloName} has landed. Now freed.");
+          silo.sendMessage("$TRAIN_GUARDS, ${silo.assignee.join(", ")}: silo ${silo.siloName} has landed. Now freed.");
         } else {
-          silo.sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING, ${silo.assignee.join(", ")}: silo ${silo.siloName} has now been freed.");
+          silo.sendMessage("$TRAIN_GUARDS, ${silo.assignee.join(", ")}: silo ${silo.siloName} has now been freed.");
         }
         // free the cache from the old active silo
         silo.detachFromCache();

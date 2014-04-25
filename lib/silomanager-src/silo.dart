@@ -66,7 +66,7 @@ class UnassignedSilo extends BaseSilo {
       return;
     _ready = isready;
     if(_ready)
-      sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING: new silo set as ready at line $line. Description is: $description. It contains: $mps and $sources");
+      sendMessage("$TRAIN_GUARDS: new silo set as ready at line $line. Description is: $description. It contains: $mps and $sources");
   }
 
   String get statusMessage => "unassigned. Ready is set to ${ready ? 'Yes': 'No'}";
@@ -134,7 +134,7 @@ class ActiveSilo extends BaseSilo {
     _status = newStatus;
     if (status.ping) {
       if (status.publishable)
-        sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING ($siloName): Ready to publish");
+        sendMessage("$TRAIN_GUARDS ($siloName): Ready to publish");
       else
         sendMessage("${assignee.join(", ")} ($siloName): ${statusMessage}");
     }
