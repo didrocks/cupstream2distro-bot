@@ -43,7 +43,7 @@ abstract class BaseSilo {
   BaseSilo(this.line, this.assignee, this.description, this.mps, this.sources,
            this.comment);
 
-  void _sendMessage(message) {
+  void sendMessage(message) {
     log.fine("Sending: $message");
     _messageController.add(message);
   }
@@ -66,7 +66,7 @@ class UnassignedSilo extends BaseSilo {
       return;
     _ready = isready;
     if(_ready)
-      _sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING: new silo set as ready at line $line. Description is: $description. It contains: $mps and $sources");
+      sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING: new silo set as ready at line $line. Description is: $description. It contains: $mps and $sources");
   }
 
   String get statusMessage => "unassigned. Ready is set to ${ready ? 'Yes': 'No'}";
@@ -103,6 +103,11 @@ class UnassignedSilo extends BaseSilo {
     scheduleMicrotask(() => this.ready = isReady);
     log.finer("Build a new unassigned silo for line: $line, $assignee, $description, $mps, $sources");
   }
+
+  /**
+   * Detach current element from cache
+   */
+  UnassignedSilo detachFromCache() => _cache.remove(this);
 }
 
 
@@ -117,11 +122,7 @@ class ActiveSilo extends BaseSilo {
   set siloName(String newSiloName) {
     if (_siloName == newSiloName)
       return;
-    if (newSiloName.isEmpty && _siloName.isNotEmpty)
-      // FIXME: doesn't work for landed or force freed silo. We should make the diff of active silos maybe and return the list?
-      _sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING, ${assignee.join(", ")}: silo $_siloName has now been freed.");
-    else
-      _sendMessage("${assignee.join(", ")}: silo $newSiloName is now assigned for $description");
+    sendMessage("${assignee.join(", ")}: silo $newSiloName is now assigned for $description");
     _siloName = newSiloName;
   }
   String _siloName;
@@ -133,9 +134,9 @@ class ActiveSilo extends BaseSilo {
     _status = newStatus;
     if (status.ping) {
       if (status.publishable)
-        _sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING ($siloName): Ready to publish");
+        sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING ($siloName): Ready to publish");
       else
-        _sendMessage("${assignee.join(", ")} ($siloName): ${statusMessage}");
+        sendMessage("${assignee.join(", ")} ($siloName): ${statusMessage}");
     }
   }
   Status _status;
@@ -185,4 +186,9 @@ class ActiveSilo extends BaseSilo {
     scheduleMicrotask(() => status = _status);
     log.finer("Build a new active silo for $id, silo: $siloName, $assignee, line: $line");
   }
+
+  /**
+   * Detach current element from cache
+   */
+  ActiveSilo detachFromCache() => _cache.remove(this);
 }

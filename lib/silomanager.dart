@@ -50,45 +50,56 @@ void _parseNewContent(String content) {
   var newActiveSilos =  new List<ActiveSilo>();
   var newUnassignedSilos =  new List<UnassignedSilo>();
 
-  var value = new CsvDataParser(content, numLineToSkip: 3);
-  var line = 3;
-  for (var item in value) {
+  var startOffset = 3;
+  var csvData = new CsvDataParser(content, numLineToSkip: startOffset);
+  var line = startOffset;
+  for (var item in csvData) {
     line++;
+    if (item[12] == "Landed") {
+      continue;
+    }
+
     var assignees = _separateContent(item[1], useSlashSeparator: true, toLowerCase: true);
     var description = item[0];
     var mps = _separateContent(item[5], toLowerCase: true);
     var sources = _separateContent(item[6], toLowerCase: true);
     var comment = item[3];
     var ready = (item[8] == 'Yes');
-
     var id = item[10];
+    var siloName = item[11];
 
-    if (id.isEmpty) {
+    if (id.isEmpty || siloName.isEmpty) {
       var silo = new UnassignedSilo(line, assignees, description, mps,
                                     sources, comment, ready);
       newUnassignedSilos.add(silo);
       if (!(unassignedSilos.contains(silo)))
           silo.message.listen(ircConnection.sendMessage);
-    }
-    else if(item[12] == "Landed") {
-      // if it has landed and was in previous activeSilos list, update the status to trigger the pings
-      var silo = activeSilos.firstWhere((silo) => id == silo.id,
-                                        orElse: () => null);
-      if(silo != null) {
-        silo.status = new Status("Landed", "", true, false);
-        silo.siloName = "";
-      }
-    }
-    else {
+    } else {
       var newStatus = new Status(item[13], item[14], item[15] == "TRUE", item[12].contains("You can publish"));
 
-      var silo = new ActiveSilo(id, item[11], newStatus, line, assignees,
+      var silo = new ActiveSilo(id, siloName, newStatus, line, assignees,
                                 description, mps, sources, comment, ready);
       newActiveSilos.add(silo);
       if (!(activeSilos.contains(silo)))
           silo.message.listen(ircConnection.sendMessage);
     }
   }
+
+  // check for newly landed content.
+  activeSilos.where((silo) => !newActiveSilos.contains(silo))
+      .forEach((silo) {
+        if (csvData.elementAt(silo.line - startOffset)[12] == "Landed") {
+          silo.sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING, ${silo.assignee.join(", ")}: silo ${silo.siloName} has landed. Now freed.");
+        } else {
+          silo.sendMessage("$TRAIN_GUARDS_IRC_NICKNAME_STRING, ${silo.assignee.join(", ")}: silo ${silo.siloName} has now been freed.");
+        }
+        // free the cache from the old active silo
+        silo.detachFromCache();
+      });
+
+  // free the requested removed from unassignedSilos
+  unassignedSilos.where((silo) => !newUnassignedSilos.contains(silo))
+      .forEach((silo) => silo.detachFromCache());
 
   activeSilos = newActiveSilos;
   unassignedSilos = newUnassignedSilos;
