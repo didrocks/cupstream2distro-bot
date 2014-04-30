@@ -51,10 +51,12 @@ void _parseNewContent(String content) {
   var newUnassignedSilos =  new List<UnassignedSilo>();
 
   var startOffset = 3;
+  var cachedStatus = new List<String>();
   var csvData = new CsvDataParser(content, numLineToSkip: startOffset);
   var line = startOffset;
   for (var item in csvData) {
     line++;
+    cachedStatus.add(item[12]);
     if (item[12] == "Landed") {
       continue;
     }
@@ -88,7 +90,7 @@ void _parseNewContent(String content) {
   // check for newly landed content.
   activeSilos.where((silo) => !newActiveSilos.contains(silo))
       .forEach((silo) {
-        if (csvData.elementAt(silo.line - startOffset)[12] == "Landed") {
+        if (cachedStatus[silo.line - startOffset - 1] == "Landed") {
           silo.sendMessage("$TRAIN_GUARDS, ${silo.assignee.join(", ")}: silo ${silo.siloName} has landed. Now freed.");
         } else {
           silo.sendMessage("$TRAIN_GUARDS, ${silo.assignee.join(", ")}: silo ${silo.siloName} has now been freed.");
