@@ -115,6 +115,7 @@ class _SiloBotHandler extends Handler {
     commands = {
       'inspect': _inspectSiloStatus,
       'status': _siloStatus,
+      'thanks': _answerThanks,
       'where': _siloComponents,
       'who': _siloOwner
     };
@@ -154,6 +155,9 @@ class _SiloBotHandler extends Handler {
     if (!found)
       cnx.sendMessage(channel, "Couldn't find anything matching this status request: $req");
   }
+
+  void _answerThanks(String req, String channel, Connection cnx) =>
+    cnx.sendMessage(channel, "You're really welcome!");
 
   void _siloComponents(String req, String channel, Connection cnx) {
     var answer = new StringBuffer("Requests containing $req. ");
