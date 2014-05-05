@@ -11,7 +11,7 @@ import "package:cupstream2distrobot/silomanager.dart" as silomanager;
 import "package:cupstream2distrobot/utils.dart";
 
 const USE_FILE = 'useFile';
-const GOOGLE_DOC_URL = "https://docs.google.com/a/canonical.com/spreadsheet/ccc?key=0AuDk72Lpx8U5dFlCc1VzeVZzWmdBZS11WERjdVc3dmc&output=csv";
+const GOOGLE_DOC_URL = "https://docs.google.com/a/canonical.com/spreadsheet/ccc?key=0AuDk72Lpx8U5dFVHQ3FuMDJGLUZCamJfSjYzbWh3Wnc&output=csv";
 
 void main(List<String> arguments) {
   Level debugLevel = Level.INFO;
