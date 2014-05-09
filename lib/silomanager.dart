@@ -77,7 +77,8 @@ void _parseNewContent(String content) {
       if (!(unassignedSilos.contains(silo)))
           silo.message.listen(ircConnection.sendMessage);
     } else {
-      var newStatus = new Status(item[13], item[14], item[15] == "TRUE", item[12].contains("You can publish"));
+      var newStatus = new Status(item[13], item[14], item[15] == "TRUE",
+          item[12].contains("You can publish") || item[12].contains("packaging changes"));
 
       var silo = new ActiveSilo(id, siloName, newStatus, line, assignees,
                                 description, mps, sources, comment, ready);

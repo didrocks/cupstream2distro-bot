@@ -133,10 +133,11 @@ class ActiveSilo extends BaseSilo {
       return;
     _status = newStatus;
     if (status.ping) {
-      if (status.publishable)
-        sendMessage("$TRAIN_GUARDS ($siloName): Ready to publish");
-      else
+      if (status.publishable) {
+        sendMessage("$TRAIN_GUARDS ($siloName): ${status.message}");
+      } else {
         sendMessage("${assignee.join(", ")} ($siloName): ${statusMessage}");
+      }
     }
   }
   Status _status;
